@@ -1,0 +1,11 @@
+{
+  "name": "timberborn-map-expander",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/LxrsV1/timberborn-map-expander.git",
+  "author": "LxrsV1-YT <69675999+LxrsV1-YT@users.noreply.github.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.5.0"
+  }
+}
