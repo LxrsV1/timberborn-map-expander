@@ -3,9 +3,18 @@
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/LxrsV1/timberborn-map-expander.git",
-  "author": "LxrsV1-YT <69675999+LxrsV1-YT@users.noreply.github.com>",
   "license": "MIT",
+  "scripts": {
+    "dev": "ts-node src/index.ts"
+  },
   "devDependencies": {
-    "@types/node": "^22.5.0"
+    "@types/archiver": "^6.0.2",
+    "@types/node": "^22.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "archiver": "^7.0.1",
+    "node-stream-zip": "^1.15.0"
   }
 }

@@ -1,4 +1,5 @@
 import { logger } from "./logger";
+import { Entity } from "./types";
 
 // Only if typescript had exstention functions :(
 export const FlipArrayVertically = (elements: any[], numCols: number) => {
@@ -37,4 +38,23 @@ export const GenerateTerrainMap = (inputStr: string): string => {
   const flipped = FlipArrayVertically(arr, 256); // idk otherwise it's flipped and weird
 
   return flipped;
+};
+
+export const GenerateEntityLocations = (oldWidth: number, newWidth: number, entities: Entity[]): Entity[] => {
+  return entities.map((entity) => {
+    const offsetX = oldWidth - (entity.Components.BlockObject ? entity.Components.BlockObject.Coordinates.X : entity.Components.Character.Position.X);
+    const offsetY = oldWidth - (entity.Components.BlockObject ? entity.Components.BlockObject.Coordinates.Y : entity.Components.Character.Position.Y);
+
+    const newX = newWidth - offsetX;
+    const newY = newWidth - offsetY;
+
+    if (entity.Components.BlockObject) {
+      entity.Components.BlockObject.Coordinates.X = newX;
+      entity.Components.BlockObject.Coordinates.Y = newY;
+    } else {
+      entity.Components.Character.Position.X = newX;
+      entity.Components.Character.Position.Y = newY;
+    }
+    return entity;
+  });
 };
