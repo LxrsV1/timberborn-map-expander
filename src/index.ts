@@ -29,7 +29,7 @@ const main = async () => {
   if (!input) return logger.fatal("Couldn't find the correct array that indicates all terrain height.", true);
 
   const terrain = GenerateTerrainMap(input);
-  const entities = GenerateEntityLocations(inputJson.Singletons.MapSize.Size.X, config.outputSize, inputJson?.Entities);
+  const entities = GenerateEntityLocations(inputJson?.Entities);
 
   const splittedTerrain = terrain.split(" ");
 
@@ -77,7 +77,7 @@ const main = async () => {
       },
       MapThumbnailCameraMover: result.Singletons.MapThumbnailCameraMover,
     },
-    Entities: result.Entities.filter((ent) => ["BadwaterSource", "Watersource"].includes(ent.Template)),
+    Entities: result.Entities.filter((ent) => ["BadwaterSource", "WaterSource"].includes(ent.Template)),
   };
 
   logger.info("Starting with writing timber save file...");
@@ -117,6 +117,7 @@ const main = async () => {
   await rmdirSync("./timberfiles/output");
 
   logger.info("Done!");
+  logger.info("If you want to use editablemap.timber, you will probably have to place your water sources back!");
 };
 
 main();

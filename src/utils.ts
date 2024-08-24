@@ -1,3 +1,4 @@
+import { WIDTHS } from "./consts";
 import { logger } from "./logger";
 import { Entity } from "./types";
 
@@ -40,21 +41,19 @@ export const GenerateTerrainMap = (inputStr: string): string => {
   return flipped;
 };
 
-export const GenerateEntityLocations = (oldWidth: number, newWidth: number, entities: Entity[]): Entity[] => {
+export const GenerateEntityLocations = (entities: Entity[]): Entity[] => {
   return entities.map((entity) => {
-    const offsetX = oldWidth - (entity.Components.BlockObject ? entity.Components.BlockObject.Coordinates.X : entity.Components.Character.Position.X);
-    const offsetY = oldWidth - (entity.Components.BlockObject ? entity.Components.BlockObject.Coordinates.Y : entity.Components.Character.Position.Y);
-
-    const newX = newWidth - offsetX;
-    const newY = newWidth - offsetY;
+    const x = (entity.Components.BlockObject ? entity.Components.BlockObject.Coordinates.Y : entity.Components.Character.Position.Y) + 128;
+    const y = 128 - (entity.Components.BlockObject ? entity.Components.BlockObject.Coordinates.X : entity.Components.Character.Position.X) - (WIDTHS[entity.Template] ?? 1);
 
     if (entity.Components.BlockObject) {
-      entity.Components.BlockObject.Coordinates.X = newX;
-      entity.Components.BlockObject.Coordinates.Y = newY;
+      entity.Components.BlockObject.Coordinates.X = x;
+      entity.Components.BlockObject.Coordinates.Y = y;
     } else {
-      entity.Components.Character.Position.X = newX;
-      entity.Components.Character.Position.Y = newY;
+      entity.Components.Character.Position.X = x;
+      entity.Components.Character.Position.Y = y;
     }
+
     return entity;
   });
 };
