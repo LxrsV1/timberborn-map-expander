@@ -16,9 +16,9 @@ export const FlipArrayVertically = (elements: any[], numCols: number) => {
   return flippedString;
 };
 
-export const GenerateTerrainMap = (inputStr: string): string => {
+export const GenerateTerrainMap = (inputStr: string, size: number): string => {
   const input = inputStr.split(" ").reverse();
-  const arr = Array(256 * 256).fill(1);
+  const arr = Array(size ** 2).fill(1);
   const inputArrSide = Math.sqrt(input.length);
 
   let totalOffsetX = 0;
@@ -54,6 +54,21 @@ export const GenerateEntityLocations = (entities: Entity[]): Entity[] => {
       entity.Components.Character.Position.Y = y;
     }
 
+    if (entity.Components.BlockObject && entity.Components.BlockObject.Orientation) entity.Components.BlockObject.Orientation.Value = GetNextRotation(entity.Components.BlockObject.Orientation.Value);
+
     return entity;
   });
+};
+
+export const GetNextRotation = (rotation: string) => {
+  switch (rotation) {
+    case "Cw90":
+      return "Cw180";
+    case "Cw180":
+      return "Cw270";
+    case "Cw270":
+      return "Cw0";
+    default:
+      return "Cw90";
+  }
 };

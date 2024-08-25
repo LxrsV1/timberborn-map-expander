@@ -122,6 +122,7 @@ export interface WaterSource {
 }
 
 export interface BlockObject {
+  Orientation: { Value: string };
   Coordinates: Coordinates;
 }
 

@@ -4,11 +4,8 @@ import { readFileSync, writeFileSync, existsSync, createWriteStream, copyFileSyn
 import StreamZip from "node-stream-zip";
 import { WorldFileData } from "./types";
 import archiver from "archiver";
-
-// TODO: make config file
-const config = {
-  outputSize: 256,
-};
+import { WIDTHS } from "./consts";
+import config from "../config.json";
 
 const main = async () => {
   logger.warn("Only maps with a perfact square size are supported!");
@@ -28,10 +25,8 @@ const main = async () => {
   const input = inputJson?.Singletons?.TerrainMap?.Heights?.Array;
   if (!input) return logger.fatal("Couldn't find the correct array that indicates all terrain height.", true);
 
-  const terrain = GenerateTerrainMap(input);
+  const terrain = GenerateTerrainMap(input, config.outputSize);
   const entities = GenerateEntityLocations(inputJson?.Entities);
-
-  const splittedTerrain = terrain.split(" ");
 
   const result: WorldFileData = inputJson; // Creating copy to work on
   result.Singletons.MapSize.Size = { X: 256, Y: 256 };
@@ -77,7 +72,11 @@ const main = async () => {
       },
       MapThumbnailCameraMover: result.Singletons.MapThumbnailCameraMover,
     },
-    Entities: result.Entities.filter((ent) => ["BadwaterSource", "WaterSource"].includes(ent.Template)),
+    Entities: result.Entities.filter((ent) => Object.keys(WIDTHS).includes(ent.Template)).map((ent) => {
+      //@ts-ignore
+      delete ent.Components.Demolishable;
+      return ent;
+    }),
   };
 
   logger.info("Starting with writing timber save file...");
@@ -117,7 +116,8 @@ const main = async () => {
   await rmdirSync("./timberfiles/output");
 
   logger.info("Done!");
-  logger.info("If you want to use editablemap.timber, you will probably have to place your water sources back!");
+  logger.info("If you want to use output.timber, your game might crash because not all buildings have been rotated or moved properly.");
+  logger.info("editablemap.timber is stable and should work perfectly. It will copy all features you can use within the map editor.");
 };
 
 main();
